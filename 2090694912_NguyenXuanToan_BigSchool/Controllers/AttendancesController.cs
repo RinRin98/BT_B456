@@ -18,15 +18,15 @@ namespace _2090694912_NguyenXuanToan_BigSchool.Controllers
             _dbContext = new ApplicationDbContext();
         }
         [HttpPost]
-        public IHttpActionResult Attend([FromBody] int courseId)
+        public IHttpActionResult Attend(AttendanceDto attendanceDto)
         {
             var userId = User.Identity.GetUserId();
-            if (_dbContext.Attendences.Any(a => a.AttendeeID == userId && a.CourseId == courseId))
+            if (_dbContext.Attendences.Any(a => a.AttendeeID == userId && a.CourseId == attendanceDto.CourseId))
                 return BadRequest("The Attendance already exists!");
             var attendance = new Attendence
             {
-                CourseId = courseId,
-                AttendeeID = User.Identity.GetUserId()
+                CourseId = attendanceDto.CourseId,
+                AttendeeID = userId
             };
             _dbContext.Attendences.Add(attendance);
             _dbContext.SaveChanges();

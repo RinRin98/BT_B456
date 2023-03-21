@@ -9,6 +9,11 @@ namespace _2090694912_NguyenXuanToan_BigSchool.ViewModels
 {
     public class CourseViewModel
     {
+        public IEnumerable<Course> UpcommingCourses { get; set; }
+
+        public int  Id { get; set; }
+        public bool ShowAction { get; set; }
+
         [Required]
         public string Place { get; set; }
 
@@ -24,6 +29,13 @@ namespace _2090694912_NguyenXuanToan_BigSchool.ViewModels
         public DateTime GetDateTime()
         {
             return DateTime.Parse(string.Format("{0} {1}", Date, Time));
+        }
+
+        public string Heading { get; set; }
+
+        public string Action
+        {
+            get { return (Id != 0) ? "Update" : "Create"; }
         }
     }
 }

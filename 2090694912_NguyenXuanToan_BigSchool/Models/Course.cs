@@ -8,7 +8,13 @@ namespace _2090694912_NguyenXuanToan_BigSchool.Models
 {
     public class Course
     {
+        public bool isShowGoing = false;
+
+        public bool isShowFollow = false;
+
         public int Id { get; set; }
+
+        public bool IsCanceled { get; set; }
 
         public ApplicationUser Lecturer { get; set; }
         [Required]

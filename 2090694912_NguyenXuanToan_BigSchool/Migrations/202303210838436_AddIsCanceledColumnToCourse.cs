@@ -3,16 +3,16 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class AddNameColumnToApplicationUser : DbMigration
+    public partial class AddIsCanceledColumnToCourse : DbMigration
     {
         public override void Up()
         {
-            AddColumn("dbo.AspNetUsers", "Name", c => c.String(nullable: false, maxLength: 255));
+            AddColumn("dbo.Courses", "IsCanceled", c => c.Boolean(nullable: false));
         }
         
         public override void Down()
         {
-            DropColumn("dbo.AspNetUsers", "Name");
+            DropColumn("dbo.Courses", "IsCanceled");
         }
     }
 }

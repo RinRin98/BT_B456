@@ -1,0 +1,56 @@
+﻿@model _2090694912_NguyenXuanToan_BigSchool.ViewModels.CourseViewModel
+@{
+    ViewBag.Title = "Attending";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Attending</h2>
+
+<ul class="course">
+    @foreach (var course in Model.UpcommingCourses)
+    {
+        <li>
+            <div class="date">
+                <div class="month">
+                    @course.DateTime.ToString("MM")
+                </div>
+                <div class="day">
+                    @course.DateTime.ToString("dd")
+                </div>
+            </div>
+            <div class="details">
+                <span class="lecturer">
+                    @course.Lecturer.Name
+                    @if (Model.ShowAction)
+                    {
+                        if (course.isShowFollow)
+                        {
+                            <button class="btn btn-success btn-sm js-tongle-follow" data-user-id="@course.LecturerId">Follow</button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-success btn-sm js-tongle-follow" data-user-id="@course.LecturerId">Following</button>
+                        }
+
+                    }
+
+                </span>
+                <span class="category">
+                    @course.Category.Name
+                </span>
+                @if (Model.ShowAction)
+                {
+                    if (course.isShowGoing)
+                    {
+                        <button data-course-id="@course.Id" class="btn btn-info btn-sm js-tongle-attendance">Going</button>
+                    }
+                    else
+                    {
+                        <button data-course-id="@course.Id" class="btn btn-info btn-sm js-tongle-attendance">Going</button>
+                    }
+                }
+
+            </div>
+        </li>
+    }
+</ul>

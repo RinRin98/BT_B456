@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -13,6 +15,16 @@ namespace _2090694912_NguyenXuanToan_BigSchool.Models
         [Required]
         [StringLength(255)]
         public string Name { get; set; }
+
+        public ICollection<Following> Followers { get; set; }
+        public ICollection<Following> Followees { get; set; }
+
+        public ApplicationUser()
+        {
+            Followees = new Collection<Following>();
+
+            Followers = new Collection<Following>();
+        }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -30,6 +42,7 @@ namespace _2090694912_NguyenXuanToan_BigSchool.Models
 
         public DbSet<Attendence> Attendences { get; set; }
 
+        public DbSet<Following> Followings { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
@@ -44,7 +57,13 @@ namespace _2090694912_NguyenXuanToan_BigSchool.Models
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Attendence>().HasRequired(a => a.Course).WithMany().WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ApplicationUser>().HasMany(u => u.Followers).WithRequired(f => f.Followee).WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ApplicationUser>().HasMany(u => u.Followees).WithRequired(f => f.Follower).WillCascadeOnDelete(false);
+
             base.OnModelCreating(modelBuilder);
+
         }
     }
 }
