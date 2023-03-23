@@ -1,8 +1,5 @@
 ﻿@model IEnumerable<_2090694912_NguyenXuanToan_BigSchool.Models.Course>
-@{
-    ViewBag.Title = "Mine";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+
 
 <div class="row">
     <ul class="course">
@@ -27,8 +24,17 @@
                 </div>
 
                 <div class="action">
-                    <a href="@Url.Action("Edit","Courses", new { id = course.Id })">Edit</a> |
-                    <a data-course-id="@course.Id" href="#" class="js-cancel-course">Cancel</a>
+                    <a href="@Url.Action("Edit","Courses", new { id = course.Id })">Edit</a>
+                    @if (course.IsCanceled)
+                    {
+                        <a data-course-id="@course.Id" href="#" class="js-uncancel-course">Canceled</a>
+                    }
+                    else
+                    {
+                        <a data-course-id="@course.Id" href="#" class="js-cancel-course">Cancel</a>
+                    }
+
+
                 </div>
             </li>
         }
@@ -39,9 +45,10 @@
 @section scripts{
     <script>
         $(function () {
-            $('.js-cancel-course').click(function (e) {
+            $('.js-cancel-course').on('click', function (e) {
                 e.preventDefault();
                 var link = $(e.target);
+                
                 bootbox.confirm("Are you sure to cancel?", function () {
                     $.ajax({
                         url: "/api/courses/" + link.attr("data-course-id"),
@@ -49,6 +56,24 @@
                     }).done(function () {
                         link.parents("li").fadeOut(function () {
                             this.remove();
+                            location.reload();
+                        });
+                    }).fail(function () {
+                    });
+                });
+            });
+            $('.js-uncancel-course').on('click', function (e) {
+                e.preventDefault();
+                var link = $(e.target);
+
+                bootbox.confirm("Are you sure to uncancel?", function () {
+                    $.ajax({
+                        url: "/api/courses/" + link.attr("data-course-id"),
+                        method: "DELETE"
+                    }).done(function () {
+                        link.parents("li").fadeOut(function () {
+                            this.remove();
+                            location.reload();
                         });
                     }).fail(function () {
                     });

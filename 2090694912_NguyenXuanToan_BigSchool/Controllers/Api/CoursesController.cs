@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace _2090694912_NguyenXuanToan_BigSchool.Controllers.Api
 {
+
     public class CoursesController : ApiController
     {
         // GET: Courses
@@ -18,25 +19,29 @@ namespace _2090694912_NguyenXuanToan_BigSchool.Controllers.Api
         {
             _dbContext = new ApplicationDbContext();
         }
-
+        
         [System.Web.Http.HttpDelete]
         public IHttpActionResult Cancel(int id)
         {
-            var userId = User.Identity.GetUserId();
-            var course = _dbContext.Courses.Single(c => c.Id == id && c.LecturerId == userId);
+            if (User.Identity == null)
+            {
+                return Unauthorized();
+            }
 
+            var userId = User.Identity.GetUserId();
+            var course = _dbContext.Courses.SingleOrDefault(c => c.Id == id && c.LecturerId == userId);
 
             if (course.IsCanceled)
             {
-                return NotFound();
+                course.IsCanceled = false;
             }
-
+            else
             course.IsCanceled = true;
 
             _dbContext.SaveChanges();
 
             return Ok();
-
         }
+
     }
 }
